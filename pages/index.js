@@ -1,8 +1,24 @@
 import Head from 'next/head'
 import Image from 'next/image'
+import { useEffect, useState } from 'react'
 import styles from '../styles/Home.module.css'
+import api from './api/api'
 
 export default function Home() {
+
+  const [valuesIPs, setValuesIPs] = useState([])
+
+  useEffect(() => {
+    api.get('/ips').then((response) => { console.log(response);
+      setValuesIPs(response.data)
+      
+    })
+    .catch((err) => {
+    console.error('ops! ocorreu um erro :'  + err);
+    });
+    }, []);
+
+
   return (
     <div className={styles.container}>
       <Head>
@@ -15,38 +31,29 @@ export default function Home() {
         <h1 className={styles.title}>
           Máquinas CRC
         </h1>
+        {valuesIPs.map(res => {
 
-        <div className={styles.grid}>
-          <a href="#" className={styles.card}>
-            <h2>192.168.0.114 (Fred)</h2>
-            <p>Ligado</p>
-          </a>
+          if (res.status == 200) {
+           var estadoPC = "ligada"
 
-          <a href="#" className={styles.card}>
-            <h2>192.168.255.255 (Fred)</h2>
-            <p>Desligado</p>
-          </a>
+          } else {
+           var estadoPC = "desligada"
+            
+          }
 
-          <a
-            href="#"
-            className={styles.card}
-          >
-            <h2>192.168.8.45 (Fred)</h2>
-            <p>Ligado</p>
-          </a>
+          return (
+            <div className={styles.grid} key={res.ip}>
+              <a href="#" className={styles.card}>
+                <h2>({res.hostname})</h2>
+                <p>IP da máquina: {res.ip}</p><br/>
+                <p>{estadoPC}</p>
+              </a>
+            </div>
+          )
 
-          <a
-            href="#"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.card}
-          >
-            <h2>198.162.5.111 (Fred)</h2>
-            <p>
-              Ligado 
-            </p>
-          </a>
-        </div>
+        })}
+
+
       </main>
 
       <footer className={styles.footer}>
