@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: "https://your-api-host-where.com"
+    baseURL: "https://api-test.a32fred.repl.co"
 });
 
 export default api;
