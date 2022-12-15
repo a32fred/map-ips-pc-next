@@ -12,7 +12,7 @@ export default function Home() {
   var error = 0
   useEffect(() => {
     setLoading(true)
-    api.get('/ips').then((response) => { console.log(response);
+    api.get('/ips').then((response) => { 
       setValuesIPs(response.data)
     setLoading(false)
     })
