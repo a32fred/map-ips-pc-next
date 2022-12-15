@@ -3,21 +3,25 @@ import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import styles from '../styles/Home.module.css'
 import api from './api/api'
+import { SpinnerCircularFixed } from 'spinners-react'
 
 export default function Home() {
 
   const [valuesIPs, setValuesIPs] = useState([])
-
+  const [loading, setLoading] = useState(false);
+  var error = 0
   useEffect(() => {
+    setLoading(true)
     api.get('/ips').then((response) => { console.log(response);
       setValuesIPs(response.data)
-      
+    setLoading(false)
     })
     .catch((err) => {
-    console.error('ops! ocorreu um erro :'  + err);
+    console.error('ops! ocorreu um erro :'  + err)
+    error = err
     });
     }, []);
-
+    
 
   return (
     <div className={styles.container}>
@@ -31,27 +35,32 @@ export default function Home() {
         <h1 className={styles.title}>
           Máquinas CRC
         </h1>
-        {valuesIPs.map(res => {
+     
+        {loading && <SpinnerCircularFixed color='#343941' size={60}/>}
 
-          if (res.status == 200) {
-           var estadoPC = "ligada"
+        {
+            valuesIPs.map(res => {
 
-          } else {
-           var estadoPC = "desligada"
-            
-          }
+            if (res.status == 200) {
+            var estadoPC = "ligada"
 
-          return (
-            <div className={styles.grid} key={res.ip}>
-              <a href="#" className={styles.card}>
-                <h2>({res.hostname})</h2>
-                <p>IP da máquina: {res.ip}</p><br/>
-                <p>{estadoPC}</p>
-              </a>
-            </div>
-          )
+            } else {
+            var estadoPC = "desligada"
+                
+            }
 
-        })}
+            return (
+                <div className={styles.grid} key={res.ip}>
+                <a href="#" className={styles.card}>
+                    <h2>({res.hostname})</h2>
+                    <p>IP da máquina: {res.ip}</p><br/>
+                    <p>{estadoPC}</p>
+                </a>
+                </div>
+            )
+
+            })
+        }
 
 
       </main>
