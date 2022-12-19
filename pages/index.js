@@ -12,7 +12,7 @@ export default function Home() {
   var error = 0
   useEffect(() => {
     setLoading(true)
-    api.get('/ips').then((response) => { 
+    api.get('/').then((response) => { 
       setValuesIPs(response.data)
     setLoading(false)
     })
@@ -41,20 +41,15 @@ export default function Home() {
         {
             valuesIPs.map(res => {
 
-            if (res.status == 200) {
-            var estadoPC = "ligada"
-
-            } else {
-            var estadoPC = "desligada"
-                
-            }
-
             return (
-                <div className={styles.grid} key={res.ip}>
+                <div className={styles.grid} key={res.ip_local}>
                 <a href="#" className={styles.card}>
-                    <h2>({res.hostname})</h2>
-                    <p>IP da máquina: {res.ip}</p><br/>
-                    <p>{estadoPC}</p>
+                    <h2>({res.nome})</h2><br/>
+                    <p> Sistema: {res.sistema} </p><br/>
+                    <p> Versão do sitema: {res.versão_sistema}</p><br/>
+                    <p> Processador: {res.processador}</p><br/>
+                    <p> Memória Ram: {res.memoria_ram}</p><br/>  
+                    <p>IP local: {res.ip_local}</p><br/>
                 </a>
                 </div>
             )
